@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import StyledComponentsRegistry from '@/lib/registry'
 import RecoilRootProvider from '@/settings/recoilRootProvider'
+import AuthSessionProvider from '@/component/auth/authSessionProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StyledComponentsRegistry>
-          <RecoilRootProvider>{children}</RecoilRootProvider>
+          <RecoilRootProvider>
+            <AuthSessionProvider>{children}</AuthSessionProvider>
+            </RecoilRootProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
