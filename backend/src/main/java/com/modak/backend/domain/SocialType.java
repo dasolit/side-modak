@@ -9,7 +9,9 @@ public enum SocialType {
 
   GOOGLE("GOOGLE"),
   NAVER("NAVER"),
-  KAKAO("KAKAO");
+  KAKAO("KAKAO"),
+  OUR("OUR");
+
 
   private final String platform;
 }

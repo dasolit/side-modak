@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor
@@ -22,6 +23,9 @@ public class User extends BaseTimeEntity {
 
   @Column(length = 50, nullable = false, unique = true)
   private String email;
+
+  @Column(nullable = false)
+  private String password;
 
   @Column(length = 50, nullable = false, unique = true)
   private String contact;
@@ -38,13 +42,26 @@ public class User extends BaseTimeEntity {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  @Column(nullable = false)
+  private String refreshToken;
+
   @Builder
-  public User(String email, String contact, String name, String picture, SocialType socialType, Role role) {
+  public User(String email, String password, String contact, String name, String picture, SocialType socialType, Role role, String refreshToken) {
     this.role = role;
+    this.password = password;
     this.email = email;
     this.contact = contact;
     this.name = name;
     this.picture = picture;
     this.socialType = socialType;
+    this.refreshToken = refreshToken;
+  }
+
+  public void passwordEncode(PasswordEncoder passwordEncoder) {
+    this.password = passwordEncoder.encode(this.password);
+  }
+
+  public void updateRefreshToken(String updateRefreshToken) {
+    this.refreshToken = updateRefreshToken;
   }
 }
