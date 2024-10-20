@@ -12,8 +12,9 @@ import com.modak.backend.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,27 +32,10 @@ public class SecurityConfig {
   private final JwtService jwtService;
   private final UserRepository userRepository;
   private final ObjectMapper objectMapper;
-  private final LoginSuccessHandler oAuth2LoginSuccessHandler;
-  private final LoginFailureHandler oAuth2LoginFailureHandler;
   private final CustomOAuth2UserService customOAuth2UserService;
-  private final BCryptPasswordEncoder passwordEncoder;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-    provider.setPasswordEncoder(passwordEncoder);
-    provider.setUserDetailsService(loginService);
-
-
-    AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
-    auth.authenticationProvider(provider);
-
-    CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
-        = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
-    customJsonUsernamePasswordLoginFilter.setAuthenticationManager(auth.getObject());
-    customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
-    customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
-
     http
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
@@ -63,19 +47,30 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/user/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated())
         .oauth2Login(oauth -> {
-          oauth.successHandler(oAuth2LoginSuccessHandler);
-          oauth.failureHandler(oAuth2LoginFailureHandler);
+          oauth.successHandler(loginSuccessHandler());
+          oauth.failureHandler( loginFailureHandler());
           oauth.userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService));
         })
         .formLogin(login -> login.loginPage("/auth/loginForm")
             .loginProcessingUrl("/auth/loginProc")
             .defaultSuccessUrl("/")
         );
-    http.addFilterAfter(customJsonUsernamePasswordLoginFilter, LogoutFilter.class);
+    http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
     http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
+  @Bean
+  public BCryptPasswordEncoder encode(){
+    return new BCryptPasswordEncoder();
+  }
 
+  @Bean
+  public AuthenticationManager authenticationManager() {
+    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    provider.setPasswordEncoder(encode());
+    provider.setUserDetailsService(loginService);
+    return new ProviderManager(provider);
+  }
 
   @Bean
   public LoginSuccessHandler loginSuccessHandler() {
@@ -88,14 +83,18 @@ public class SecurityConfig {
   }
 
   @Bean
-  public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-    JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository, passwordEncoder);
-    return jwtAuthenticationFilter;
+  public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
+    CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
+        = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
+    customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
+    customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
+    customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
+    return customJsonUsernamePasswordLoginFilter;
   }
 
   @Bean
-  public BCryptPasswordEncoder encode(){
-    return new BCryptPasswordEncoder();
+  public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
+    JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository, encode());
+    return jwtAuthenticationFilter;
   }
-
 }
