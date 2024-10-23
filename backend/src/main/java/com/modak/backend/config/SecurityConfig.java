@@ -43,7 +43,7 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests((authorizeRequests) ->
             authorizeRequests
-                .requestMatchers("/","/user/join", "/WEB-INF/**", "/js/**", "/css/**", "/image/**", "/favicon.ico").permitAll()
+                .requestMatchers("/", "/home","/user/join", "/WEB-INF/**", "/js/**", "/css/**", "/image/**", "/favicon.ico").permitAll()
                 .requestMatchers("/api/v1/user/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated())
         .oauth2Login(oauth -> {
