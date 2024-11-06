@@ -1,6 +1,6 @@
-package com.ds.springbootaws.config.auth.dto;
+package com.modak.backend.dto;
 
-import com.ds.springbootaws.domain.user.User;
+import com.modak.backend.domain.User;
 import java.io.Serializable;
 import lombok.Getter;
 

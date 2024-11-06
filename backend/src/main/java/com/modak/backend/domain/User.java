@@ -24,10 +24,10 @@ public class User extends BaseTimeEntity {
   @Column(length = 50, nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String password;
 
-  @Column(length = 50, nullable = false, unique = true)
+  @Column(length = 50, nullable = true, unique = true)
   private String contact;
 
   @Column(length = 50, nullable = false, unique = true)
@@ -42,7 +42,7 @@ public class User extends BaseTimeEntity {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String refreshToken;
 
   @Builder
@@ -63,5 +63,9 @@ public class User extends BaseTimeEntity {
 
   public void updateRefreshToken(String updateRefreshToken) {
     this.refreshToken = updateRefreshToken;
+  }
+
+  public String getRoleKey() {
+    return this.role.getKey();
   }
 }
