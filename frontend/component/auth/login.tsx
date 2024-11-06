@@ -1,20 +1,21 @@
 'use client'
-import { useSession, signIn, signOut } from 'next-auth/react'
 
 export default function Login() {
-  const { data: session } = useSession()
-  if (session) {
-    return (
-      <>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    )
-  }
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn('google')}>Sign in</button>
+      <span>Login</span>
+      <br />
+      <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:3000/">
+        네이버로그인
+      </a>
+      <br />
+      <a href="http://localhost:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/">
+        카카오로그인
+      </a>
+      <br />
+      <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/">
+        구글 로그인
+      </a>
     </>
   )
 }
