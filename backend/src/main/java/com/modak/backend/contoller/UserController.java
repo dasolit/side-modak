@@ -3,7 +3,9 @@ package com.modak.backend.contoller;
 
 import com.modak.backend.dto.UserDTO;
 import com.modak.backend.service.UserService;
-import com.modak.backend.util.ApiResponse;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +21,12 @@ public class UserController {
   private final UserService userService;
 
   @GetMapping
-  public ApiResponse<String> getUser() {
-    return ApiResponse.ok(200, "테스트");
+  public String getUser(HttpServletResponse response) {
+    response.setHeader("hghh","hfsd");
+    Map<String, String> map = new HashMap<>();
+    map.put("username", "admin");
+
+    return "하하하";
   }
 
   @PostMapping("")

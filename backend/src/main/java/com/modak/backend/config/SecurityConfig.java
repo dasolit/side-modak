@@ -1,6 +1,7 @@
 package com.modak.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.modak.backend.auth.CustomOAuth2UserService;
 import com.modak.backend.domain.Role;
 import com.modak.backend.handler.OAuth2AuthenticationFailureHandler;
 import com.modak.backend.handler.OAuth2AuthenticationSuccessHandler;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 @EnableWebSecurity
@@ -39,14 +41,14 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests((authorizeRequests) ->
             authorizeRequests
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/", "/home","/user/join", "/WEB-INF/**", "/js/**", "/css/**", "/image/**", "/favicon.ico").permitAll()
                 .requestMatchers("/api/v1/user/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated())
         .oauth2Login(oauth -> {
           oauth.userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
           .successHandler(oAuth2AuthenticationSuccessHandler)
-              .failureHandler(oAuth2AuthenticationFailureHandler)
-              .defaultSuccessUrl("http://localhost:3000/");
+          .failureHandler(oAuth2AuthenticationFailureHandler);
         });
     return http.build();
   }
