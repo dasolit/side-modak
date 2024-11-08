@@ -492,3 +492,5 @@ gradle/
 *.yaml
 *.yml
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,intellij,webstorm,java,gradle,node,react,nextjs
+
+.env*
