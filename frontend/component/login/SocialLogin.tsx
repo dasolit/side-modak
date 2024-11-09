@@ -1,13 +1,15 @@
 'use client'
 import styled from 'styled-components'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const SocialLoginArea = () => {
   return (
     <SocialLoginDiv>
       <Title>Sign in</Title>
       <LoginBox>
-        <a
+        {/* todo: 공통으로 빼기 */}
+        <Link
           href={`${process.env.NEXT_PUBLIC_BACKEND_URL}${process.env.NEXT_PUBLIC_NAVER_SOCIAL_LOGIN_URL}${process.env.NEXT_PUBLIC_FRONT_URL}`}
         >
           <Image
@@ -17,8 +19,8 @@ const SocialLoginArea = () => {
             width={250}
             height={50}
           />
-        </a>
-        <a
+        </Link>
+        <Link
           href={`${process.env.NEXT_PUBLIC_BACKEND_URL}${process.env.NEXT_PUBLIC_KAKAO_SOCIAL_LOGIN_URL}${process.env.NEXT_PUBLIC_FRONT_URL}`}
         >
           <Image
@@ -28,8 +30,8 @@ const SocialLoginArea = () => {
             width={250}
             height={50}
           />
-        </a>
-        <a
+        </Link>
+        <Link
           href={`${process.env.NEXT_PUBLIC_BACKEND_URL}${process.env.NEXT_PUBLIC_GOOGLE_SOCIAL_LOGIN_URL}${process.env.NEXT_PUBLIC_FRONT_URL}`}
         >
           <Image
@@ -39,7 +41,7 @@ const SocialLoginArea = () => {
             width={250}
             height={50}
           />
-        </a>
+        </Link>
       </LoginBox>
     </SocialLoginDiv>
   )

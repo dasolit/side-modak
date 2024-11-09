@@ -3,6 +3,7 @@ package com.modak.backend.handler;
 import com.modak.backend.auth.JwtProcess;
 import com.modak.backend.auth.PrincipalDetails;
 import com.modak.backend.domain.User;
+import com.modak.backend.service.RedisService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
   private final JwtProcess jwtProcess;
+  private final RedisService redisService;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -39,6 +41,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     log.info("refreshToken={}", refreshToken);
     addCookie(response,"accessToken", accessToken);
     addCookie(response, "refreshToken", refreshToken);
+    redisService.set(user.getEmail(), refreshToken);
+    log.info("redis={}", redisService.get(user.getEmail()));
 
     getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000");
 
