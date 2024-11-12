@@ -6,10 +6,12 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.modak.backend.domain.Role;
 import com.modak.backend.domain.User;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JwtProcess {
 
   private static final String BEARER = "Bearer ";

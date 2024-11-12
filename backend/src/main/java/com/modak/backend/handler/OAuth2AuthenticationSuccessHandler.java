@@ -30,13 +30,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     PrincipalDetails principal = (PrincipalDetails) auth.getPrincipal();
 
     User user = principal.getUser();
-    String additionalInputUri = "";
     String accessToken = jwtProcess.createAccessToken(principal);
-    String refreshToken = saveRefreshToken(user);
+    String refreshToken= jwtProcess.createRefreshToken(user.getEmail(), user.getRoleKey());
 
-    if(user.getName() == null) {
-      additionalInputUri = "login";
-    }
+
     log.info("accessToken={}", accessToken);
     log.info("refreshToken={}", refreshToken);
     addCookie(response,"accessToken", accessToken);
@@ -54,6 +51,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     cookie.setPath("/");
     response.addCookie(cookie);
   }
+
   private static void addCookie(HttpServletResponse response, String name, String value) {
     addCookie(response, name, value, true);
   }
