@@ -2,8 +2,6 @@
 
 const Logout = ({ accessToken }) => {
   const onclick = () => {
-    console.log('로그아웃')
-    console.log(accessToken)
     const logout = async () => {
       try {
         const res = await fetch(

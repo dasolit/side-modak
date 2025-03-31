@@ -15,5 +15,4 @@ const LoginIndex = () => {
 
 export default LoginIndex
 const LoginIndexDiv = styled.div`
-  width: 40rem;
 `

@@ -314,10 +314,13 @@ const GlobalStyle = createGlobalStyle`
     letter-spacing: 0.025em;
     color: var(--font-color);
     background-color: var(--bg-color);
-
-    > div {
-      width: 100%;
-    }
+  }
+  .container {
+      width: 430px;
+      min-height: 100vh;
+      height: 100dvh;
+      margin: 0 auto;
+      background-color: var(--bg-color);
   }
 `
 

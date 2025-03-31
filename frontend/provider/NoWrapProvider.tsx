@@ -7,20 +7,13 @@ const NoWrapProvider = ({ children }: PropsWithChildren) => {
   return (
     <Wrapper>
       <GlobalStyle />
-      <InnerWrapper>{children}</InnerWrapper>
+      <InnerWrapper className="container">{children}</InnerWrapper>
     </Wrapper>
   )
 }
 
 export default NoWrapProvider
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  height: 100%;
-`
+const Wrapper = styled.div``
 
-const InnerWrapper = styled.div`
-  border-radius: 0.3rem;
-  align-content: center;
-`
+const InnerWrapper = styled.div``
