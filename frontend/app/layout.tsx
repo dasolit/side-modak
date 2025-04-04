@@ -1,9 +1,11 @@
-import type {Metadata} from 'next'
+import type { Metadata } from 'next'
 import './globals.css'
 import StyledComponentsRegistry from '@/lib/registry'
+import BottomNav from '@/component/common/BottomNav'
+import Header from '@/component/common/Header'
 
 export const metadata: Metadata = {
-  title: 'Modak',
+  title: 'Moda',
   description: '환영합니다!',
 }
 
@@ -15,7 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <div className="container">
+            <Header />
+            {children}
+          </div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   )

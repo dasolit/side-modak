@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    --font-color: #ffffff;
+    --font-color: #000000;
     --font-black-color: #000000;
     --font-gray-color: #B3B3B5;
     --bg-color: #F6F5F7;
@@ -316,11 +316,12 @@ const GlobalStyle = createGlobalStyle`
     background-color: var(--bg-color);
   }
   .container {
+      position: relative;
       width: 430px;
       min-height: 100vh;
       height: 100dvh;
       margin: 0 auto;
-      background-color: var(--bg-color);
+      background-color: var(--white-color);
   }
 `
 
