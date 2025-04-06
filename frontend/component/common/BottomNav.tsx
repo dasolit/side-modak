@@ -3,16 +3,20 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import styled from 'styled-components'
+import { FaCalendarAlt } from 'react-icons/fa'
+import { BsChatHeartFill } from 'react-icons/bs'
+import { GiAlarmClock } from 'react-icons/gi'
+import { FaUserAstronaut } from 'react-icons/fa'
 
 const navItems = [
-  { name: '홈', path: '/', icon: '📅' },
-  { name: '채팅', path: '/chat', icon: '💬' },
-  { name: '디데이', path: '/dday', icon: '⏰' },
-  { name: '마이페이지', path: '/mypage', icon: '👤' },
+  { name: '홈', path: '/', icon: FaCalendarAlt },
+  { name: '채팅', path: '/chat', icon: BsChatHeartFill },
+  { name: '디데이', path: '/dday', icon: GiAlarmClock },
+  { name: '마이페이지', path: '/mypage', icon: FaUserAstronaut },
 ]
 
 const NavContainer = styled.nav`
-  position: absolute;
+  position: fixed; // absolute → fixed로 변경: 스크롤 내려도 항상 보이게
   bottom: 0;
   left: 0;
   right: 0;
@@ -31,7 +35,6 @@ const NavLink = styled(Link)`
   color: inherit;
 `
 
-// ✅ $active: transient prop으로 DOM에 안 들어감
 const NavItem = styled.div<{ $active: boolean }>`
   display: flex;
   flex-direction: column;
@@ -59,13 +62,15 @@ export default function BottomNav() {
 
   return (
     <NavContainer>
-      {navItems.map((item) => {
-        const isActive = pathname === item.path
+      {navItems.map(({ name, path, icon: Icon }) => {
+        const isActive = pathname === path
         return (
-          <NavLink key={item.name} href={item.path}>
+          <NavLink key={name} href={path}>
             <NavItem $active={isActive}>
-              <div className="icon">{item.icon}</div>
-              {item.name}
+              <div className="icon">
+                <Icon />
+              </div>
+              {name}
             </NavItem>
           </NavLink>
         )
